@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QVector>
 #include "uarttransmitter.h"
 
 QT_BEGIN_NAMESPACE
@@ -19,6 +20,7 @@ public:
 private:
     Ui::MainWindow *ui;
     UartTransmitter* uart;
+    QVector<qreal>* uartData;
 
 public slots:
     void uartReadyRead();
