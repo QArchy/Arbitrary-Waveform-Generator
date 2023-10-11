@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "uarttransmitter.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,5 +18,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    UartTransmitter* uart;
+
+public slots:
+    void uartReadyRead();
 };
 #endif // MAINWINDOW_H

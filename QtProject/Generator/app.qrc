@@ -1,0 +1,9 @@
+<RCC>
+    <qresource>
+        <file>img/triangle.png</file>
+        <file>img/sin.png</file>
+        <file>img/saw.png</file>
+        <file>img/rect.png</file>
+        <file>img/noise.png</file>
+    </qresource>
+</RCC>
