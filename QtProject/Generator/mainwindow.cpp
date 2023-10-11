@@ -5,6 +5,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->setupUi(this);
     uart = new UartTransmitter();
     uart->configurePort("COM4");
+    uart->open(QIODevice::OpenModeFlag::ReadOnly);
 
     uartData = new QVector<qreal>(1024);
 
@@ -55,22 +56,22 @@ void MainWindow::uartReadyRead() {
             case ReadState::SOM: arr[i] == 's' ? readState = SIGNAL_DATA_32_24 : readState = SOM;
             case ReadState::SIGNAL_DATA_32_24:
                 newByte &= (0x00000000 | (((quint32) arr[i]) << 24));
-                ui->outputText->setText(ui->outputText->text() + 's');
-                ui->outputText->setText(ui->outputText->text() + (char)newByte);
+                ui->outputText->appendPlainText(QString('s'));
+                ui->outputText->appendPlainText(QString(QChar(arr[i])));
                 readState = SIGNAL_DATA_23_16;
             case ReadState::SIGNAL_DATA_23_16:
                 newByte &= (0xFF000000 | (((quint32) arr[i]) << 16));
-                ui->outputText->setText(ui->outputText->text() + (char)newByte);
+                ui->outputText->appendPlainText(QString(QChar(arr[i])));
                 readState = SIGNAL_DATA_15_8;
             case ReadState::SIGNAL_DATA_15_8:
                 newByte &= (0xFFFF0000 | (((quint32) arr[i]) << 8));
-                ui->outputText->setText(ui->outputText->text() + (char)newByte);
+                ui->outputText->appendPlainText(QString(QChar(arr[i])));
                 readState = SIGNAL_DATA_7_0;
             case ReadState::SIGNAL_DATA_7_0:
                 newByte &= (0xFFFFFF00 | ((quint32) arr[i]));
-                ui->outputText->setText(ui->outputText->text() + (char)newByte);
-                ui->outputText->setText(ui->outputText->text() + 'e');
-                ui->outputText->setText(ui->outputText->text() + '\n');
+                ui->outputText->appendPlainText(QString(QChar(arr[i])));
+                ui->outputText->appendPlainText(QString('e'));
+                ui->outputText->appendPlainText(QString('\n'));
                 readState = EOM;
             case ReadState::EOM: arr[i] == 'e' ? readState = SOM : readState = SOM;
         }
@@ -81,4 +82,6 @@ void MainWindow::uartReadyRead() {
         ui->customPlot->graph(0)->setData(*uartData, *uartData);
         ui->customPlot->graph(0)->rescaleAxes();
     }
+
+    this->update();
 }
