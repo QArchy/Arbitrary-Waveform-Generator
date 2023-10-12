@@ -152,3 +152,12 @@ void MainWindow::on_fpgaFreqLineEdit_textChanged(const QString &arg1) {
 
 //    this->update();
 //}
+
+void MainWindow::on_portOpenBtn_clicked() {
+    if (uart->isOpen())
+        return;
+    if (!uart->open(QIODevice::OpenModeFlag::ReadWrite)) {
+        // show error
+    }
+}
+

@@ -54,5 +54,6 @@ private slots:
     void waveformCheckChanged(bool checked);
     void on_AmplIncrDecrComboBox_currentIndexChanged(int index);
     void on_fpgaFreqLineEdit_textChanged(const QString &arg1);
+    void on_portOpenBtn_clicked();
 };
 #endif // MAINWINDOW_H
