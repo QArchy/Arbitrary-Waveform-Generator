@@ -10,12 +10,13 @@ module signalGenerator(
 	wire [31:0] ramp_out = -saw_out;
 	wire [31:0] square_out = (saw_out > 127) ? 8'b11111111 : 8'b00000000;
 	wire [31:0] tri_out = (saw_out > 7'd127) ?  -saw_out : 8'd127 + saw_out;
-					 
-	//wire [7:0] sin_out = 8'b00000000;
-	//sinRom sinRom_inst(
-	//	.addr(saw_out[31:31-7]),
-	//	.clk(clk)
-	//);
+	
+	wire [7:0] sin_out;
+	sinRom sinRom_inst(
+		.address(accumulator[31:31-7]),
+		.clock(clk),
+		.q(sin_out)
+	);
 	
 	wire [31:0] noise_out;
 	noiseGenerator noiseGenerator_inst(
@@ -29,7 +30,7 @@ module signalGenerator(
 			3'b001: signal <= ramp_out;
 			3'b010: signal <= square_out;
 			3'b011: signal <= tri_out;
-			//3'b100: signal <= sin_out;
+			3'b100: signal <= {sin_out, 24'd0};
 			3'b101: signal <= noise_out;
 		endcase
 		accumulator <= accumulator + adder;
