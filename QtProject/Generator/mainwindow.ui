@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>846</width>
-    <height>458</height>
+    <width>845</width>
+    <height>428</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -653,7 +653,7 @@ QWidget { font: 9pt ; }</string>
          </layout>
         </widget>
        </item>
-       <item row="3" column="0" alignment="Qt::AlignHCenter|Qt::AlignTop">
+       <item row="3" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
         <widget class="QGroupBox" name="DdsGroupBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -665,6 +665,29 @@ QWidget { font: 9pt ; }</string>
           <string>Dds</string>
          </property>
          <layout class="QFormLayout" name="formLayout_3">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="portOpenBtn">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Open Port</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="choosePortComboBox">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
           <item row="2" column="0">
            <widget class="QLabel" name="fpgaFreqLabel">
             <property name="text">
@@ -683,33 +706,13 @@ QWidget { font: 9pt ; }</string>
            </widget>
           </item>
           <item row="3" column="0">
-           <widget class="QLabel" name="outputFreqLabel">
-            <property name="text">
-             <string>Output frequency [Hz]</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLineEdit" name="outputFreqLineEdit">
-            <property name="text">
-             <string>1</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
            <widget class="QLabel" name="adderLabel">
             <property name="text">
              <string>adder</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
+          <item row="3" column="1">
            <widget class="QLineEdit" name="adderLineEdit">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -728,14 +731,14 @@ QWidget { font: 9pt ; }</string>
             </property>
            </widget>
           </item>
-          <item row="5" column="0">
+          <item row="4" column="0">
            <widget class="QLabel" name="adderIntLabel">
             <property name="text">
              <string>adder (int)</string>
             </property>
            </widget>
           </item>
-          <item row="5" column="1">
+          <item row="4" column="1">
            <widget class="QLineEdit" name="adderIntLineEdit">
             <property name="text">
              <string>21</string>
@@ -745,29 +748,6 @@ QWidget { font: 9pt ; }</string>
             </property>
             <property name="readOnly">
              <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QComboBox" name="choosePortComboBox">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QPushButton" name="portOpenBtn">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Open Port</string>
             </property>
            </widget>
           </item>
@@ -784,7 +764,7 @@ QWidget { font: 9pt ; }</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>846</width>
+     <width>845</width>
      <height>21</height>
     </rect>
    </property>

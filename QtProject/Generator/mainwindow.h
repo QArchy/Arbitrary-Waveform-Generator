@@ -1,7 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#define DEBUG_MODE
+
+#ifdef DEBUG_MODE
 #include <QDebug>
+#endif
+
 #include <QMainWindow>
 #include <QVector>
 #include "uarttransmitter.h"
@@ -45,6 +50,9 @@ private:
 private slots:
     //void uartReadyRead();
     void frequencyTextChanged(const QString& str);
+    void amplitudeTextChanged(const QString& str);
     void waveformCheckChanged(bool checked);
+    void on_AmplIncrDecrComboBox_currentIndexChanged(int index);
+    void on_fpgaFreqLineEdit_textChanged(const QString &arg1);
 };
 #endif // MAINWINDOW_H
