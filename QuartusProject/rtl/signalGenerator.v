@@ -26,12 +26,12 @@ module signalGenerator(
 	
 	always @(posedge clk) begin
 		case (signalNumber)
-			3'b000: signal <= saw_out;
-			3'b001: signal <= ramp_out;
-			3'b010: signal <= square_out;
-			3'b011: signal <= tri_out;
-			3'b100: signal <= {sin_out, 24'd0};
-			3'b101: signal <= noise_out;
+			3'b000: signal <= {sin_out, 24'd0};
+			3'b001: signal <= noise_out;
+			3'b010: signal <= tri_out;
+			3'b011: signal <= square_out;
+			3'b100: signal <= saw_out;
+			3'b101: signal <= ramp_out;
 		endcase
 		accumulator <= accumulator + adder;
 	end

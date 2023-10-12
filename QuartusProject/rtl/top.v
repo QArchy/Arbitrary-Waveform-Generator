@@ -50,13 +50,18 @@ module top(
 	
 	// ------------------------------------------- I2C CONFIG
 	
+	//amplitude_curcuit_transmitter(
+	//	.clk(maxclk),
+	//	// input amplitude[31:0]
+	//);
+	
 	//i2cDacTransmitter(
 	//	.clk(i2cPllFrequency),
 	//	// input signal[31:31-7]
 	//);
 	
 	//r2r_curcuit_transmitter(
-	//	.clk(i2cPllFrequency),
+	//	.clk(maxclk),
 	//	// input signal[31:31-7]
 	//);
 	
