@@ -23,7 +23,7 @@ module signalGenerator(
 		.clk(clk),
 		.noise(noise_out)
 	);
-					 
+	
 	always @(posedge clk) begin
 		case (signalNumber)
 			3'b000: signal <= saw_out;
