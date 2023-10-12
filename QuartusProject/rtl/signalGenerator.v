@@ -17,11 +17,11 @@ module signalGenerator(
 	//	.clk(clk)
 	//);
 	
-	//wire [31:0] noise_out = 8'b00000000;
-	//noiseGenerator noiseGenerator_inst(
-	//	.addr(saw_out[31:31-7]),
-	//	.clk(clk)
-	//);
+	wire [31:0] noise_out;
+	noiseGenerator noiseGenerator_inst(
+		.clk(clk),
+		.noise(noise_out)
+	);
 					 
 	always @(posedge clk) begin
 		case (signalNumber)
@@ -30,7 +30,7 @@ module signalGenerator(
 			3'b010: signal <= square_out;
 			3'b011: signal <= tri_out;
 			//3'b100: signal <= sin_out;
-			//3'b101: signal <= noise_out;
+			3'b101: signal <= noise_out;
 		endcase
 		accumulator <= accumulator + adder;
 	end
