@@ -3,8 +3,6 @@
 *.qsys
 *.sopcinfo
 *.qws
-*.stp
-*/tb
 */db
 */greybox_tmp
 */incremental_db
@@ -19,3 +17,13 @@
 ~$$FunctionalDiagram.~vsdx
 *.ms14 (Security copy)
 *.jpg
+*.rpt
+*.summary
+*.smsg
+*.jdi
+*.pin
+*.sld
+*.done
+*.cdf
+*.wlf
+*/work*
