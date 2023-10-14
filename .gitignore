@@ -67,3 +67,7 @@ QuartusProject/project/db/ip/sldeadc5d3b/submodules/alt_sld_fab_alt_sld_fab_sldf
 *.hb_info
 *.sig
 QuartusProject/project/incremental_db/README
+*.hsd
+*.tdb
+*.dfp
+*.rcfdb
