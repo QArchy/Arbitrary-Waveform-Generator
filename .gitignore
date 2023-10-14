@@ -26,4 +26,10 @@
 *.done
 *.cdf
 *.wlf
-*/work*
+*/work/*
+QuartusProject/sim/work/_vmake
+*.qtl
+*.qdb
+*.qpg
+QuartusProject/sim/work/_info
+*.ini
