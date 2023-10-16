@@ -9,6 +9,7 @@
 
 #include <QMainWindow>
 #include <QVector>
+#include "uartconfigdialog.h"
 #include "uarttransmitter.h"
 
 enum WaveForm {
@@ -21,13 +22,11 @@ enum WaveForm {
 };
 
 struct Dds {
-    qreal fpgaFrequency = 200000000;
-    qreal outputFrequency = 1;
-    bool outputAmplitudeIncrease = 1;
-    qreal outputAmplitude = 1;
+    quint32 fpgaFrequency = 200000000;
+    quint32 outputAmplitude = 0;
     qreal adder = 21.47484;
     quint32 adderInt = 21;
-    WaveForm wave = WaveForm::Sin;
+    quint8 wave = WaveForm::Sin;
 };
 
 QT_BEGIN_NAMESPACE
@@ -44,16 +43,17 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    UartConfigDialog *uartConfigDialog;
     UartTransmitter* uart;
     Dds* dds;
+    void sendCommand();
 
 private slots:
     //void uartReadyRead();
     void frequencyTextChanged(const QString& str);
     void amplitudeTextChanged(const QString& str);
     void waveformCheckChanged(bool checked);
-    void on_AmplIncrDecrComboBox_currentIndexChanged(int index);
-    void on_fpgaFreqLineEdit_textChanged(const QString &arg1);
-    void on_portOpenBtn_clicked();
+    void showUartConfig(bool checked = false);
+    void uartGetConfig(uartConfig uartConf);
 };
 #endif // MAINWINDOW_H

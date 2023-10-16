@@ -9,15 +9,18 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     qcustomplot/qcustomplot.cpp \
+    uartconfigdialog.cpp \
     uarttransmitter.cpp
 
 HEADERS += \
     mainwindow.h \
     qcustomplot/qcustomplot.h \
+    uartconfigdialog.h \
     uarttransmitter.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    uartconfigdialog.ui
 
 RESOURCES = app.qrc
 

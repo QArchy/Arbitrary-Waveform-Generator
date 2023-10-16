@@ -7,8 +7,11 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     // ------------------------------ Varivable allocations ------------------------------
     uart = new UartTransmitter();
     dds = new Dds();
+    uartConfigDialog = new UartConfigDialog();
 
     // ------------------------------ Signal -> Slot connections ------------------------------
+    QObject::connect(ui->actionComPortConfig, SIGNAL(triggered(bool)), this, SLOT(showUartConfig(bool)));
+    QObject::connect(uartConfigDialog, SIGNAL(sig_uartConfig(uartConfig)), this, SLOT(uartGetConfig(uartConfig)));
     //QObject::connect (uart, SIGNAL(readyRead()), this, SLOT(uartReadyRead()));
 
     // Frequency slots
@@ -22,9 +25,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     QObject::connect (ui->Freq_10MHz_SpinBox, SIGNAL(textChanged(const QString&)), this, SLOT(frequencyTextChanged(const QString&)));
 
     // Amplitude slots
-    QObject::connect (ui->Ampl1SpinBox, SIGNAL(textChanged(const QString&)), this, SLOT(amplitudeTextChanged(const QString&)));
-    QObject::connect (ui->Ampl10SpinBox, SIGNAL(textChanged(const QString&)), this, SLOT(amplitudeTextChanged(const QString&)));
-    QObject::connect (ui->Ampl100SpinBox, SIGNAL(textChanged(const QString&)), this, SLOT(amplitudeTextChanged(const QString&)));
+    QObject::connect (ui->VPercentSpinBox, SIGNAL(textChanged(const QString&)), this, SLOT(amplitudeTextChanged(const QString&)));
 
     // Wafeform slots
     QObject::connect (ui->SinRadioBtn, SIGNAL(clicked(bool)), this, SLOT(waveformCheckChanged(bool)));
@@ -41,20 +42,46 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
+void MainWindow::sendCommand() {
+    QByteArray command;
+    command.append('s');
+
+    command.append((char*)(&dds->wave), 1);
+#ifdef DEBUG_MODE
+    qDebug() << "Transmitting Output wave: " << (quint8)command[1];
+#endif
+    command.append((char*)(&dds->adderInt), 4);
+#ifdef DEBUG_MODE
+    qDebug() << "Transmitting Adder: " << (quint8)command[2] << ' ' << (quint8)command[3] << ' ' << (quint8)command[4] << ' ' << (quint8)command[5] << ' ';
+#endif
+    command.append((char*)(&dds->outputAmplitude), 4);
+#ifdef DEBUG_MODE
+    qDebug() << "Transmitting Output amplitude: " << (quint8)command[6] << ' ' << (quint8)command[7] << ' ' << (quint8)command[8] << ' ' << (quint8)command[9] << ' ';
+#endif
+
+    command.append('e');
+    uart->write(command);
+}
+
 void MainWindow::frequencyTextChanged(const QString& str) {
     QString newFrequencyStr =
         ui->Freq_10MHz_SpinBox->text() + ui->Freq_1MHz_SpinBox->text() +
         ui->Freq_100KHz_SpinBox->text() + ui->Freq_10KHz_SpinBox->text() + ui->Freq_1KHz_SpinBox->text() +
         ui->Freq_100Hz_SpinBox->text() + ui->Freq_10Hz_SpinBox->text() + ui->Freq_1Hz_SpinBox->text();
-    dds->outputFrequency = newFrequencyStr.toDouble();
-#ifdef DEBUG_MODE
-    qDebug() << "Output frequency: " << dds->outputFrequency;
-#endif
+    dds->adder = newFrequencyStr.toDouble() / dds->fpgaFrequency * 4294967296 /* 2^32 */;
+    dds->adderInt = qRound(dds->adder);
+    ui->adderLineEdit->setText(QString::number(dds->adder));
+    ui->adderIntLineEdit->setText(QString::number(dds->adderInt));
+    sendCommand();
 }
 
 void MainWindow::amplitudeTextChanged(const QString& str) {
-    QString newAmplitudeStr = ui->Ampl100SpinBox->text() + ui->Ampl10SpinBox->text() + ui->Ampl1SpinBox->text();
-    dds->outputAmplitude = newAmplitudeStr.toDouble();
+    qreal Vmax = 3.3;
+    quint32 n = 256;
+    qreal step = Vmax / n;
+    quint32 currentNumberOfSteps = qRound((ui->VPercentSpinBox->text().toDouble() / 100 * Vmax) / step);
+    dds->outputAmplitude = currentNumberOfSteps;
+    sendCommand();
 #ifdef DEBUG_MODE
     qDebug() << "Output amplitude: " << dds->outputAmplitude;
 #endif
@@ -74,31 +101,21 @@ void MainWindow::waveformCheckChanged(bool checked) {
     } else if (ui->RampRadioBtn->isChecked()) {
         dds->wave = WaveForm::Ramp;
     }
+    sendCommand();
 #ifdef DEBUG_MODE
     qDebug() << "Dds wave: " << dds->wave;
 #endif
 }
 
-void MainWindow::on_AmplIncrDecrComboBox_currentIndexChanged(int index) {
-    switch (index) {
-        case 1: dds->outputAmplitudeIncrease = true;
-        case 2: dds->outputAmplitudeIncrease = false;
-    }
-#ifdef DEBUG_MODE
-    qDebug() << "Output amplitude increase: " << dds->outputAmplitudeIncrease;
-#endif
+void MainWindow::showUartConfig(bool checked) {
+    uartConfigDialog->updatePortNames();
+    uartConfigDialog->open();
 }
 
-void MainWindow::on_fpgaFreqLineEdit_textChanged(const QString &arg1) {
-    bool ok;
-    quint32 tmp = arg1.toUInt(&ok, 10);
-    if (ok) {
-        dds->fpgaFrequency = tmp;
-    } else {
-        ui->fpgaFreqLineEdit->setText("200000000");
-    }
+void MainWindow::uartGetConfig(uartConfig uartConf) {
+    bool dbg = uart->configurePort(uartConf);
 #ifdef DEBUG_MODE
-    qDebug() << "FPGA frequency: " << dds->fpgaFrequency;
+    qDebug() << "Port opened: " << dbg;
 #endif
 }
 
@@ -152,12 +169,3 @@ void MainWindow::on_fpgaFreqLineEdit_textChanged(const QString &arg1) {
 
 //    this->update();
 //}
-
-void MainWindow::on_portOpenBtn_clicked() {
-    if (uart->isOpen())
-        return;
-    if (!uart->open(QIODevice::OpenModeFlag::ReadWrite)) {
-        // show error
-    }
-}
-
