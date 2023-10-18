@@ -9,25 +9,10 @@
 
 #include <QMainWindow>
 #include <QVector>
+#include <QtMath>
 #include "uartconfigdialog.h"
 #include "uarttransmitter.h"
-
-enum WaveForm {
-    Sin = 0,
-    Noise = 1,
-    Triangle = 2,
-    Rect = 3,
-    Saw = 4,
-    Ramp = 5
-};
-
-struct Dds {
-    quint32 fpgaFrequency = 200000000;
-    quint32 outputAmplitude = 0;
-    qreal adder = 21.47484;
-    quint32 adderInt = 21;
-    quint8 wave = WaveForm::Sin;
-};
+#include "dds.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -42,18 +27,22 @@ public:
     ~MainWindow();
 
 private:
+    // ui windows
     Ui::MainWindow *ui;
     UartConfigDialog *uartConfigDialog;
+    // class instances
     UartTransmitter* uart;
-    Dds* dds;
+    DDS* dds;
+    // private functions
     void sendCommand();
+    void plotNewData(quint32 byte);
 
 private slots:
-    //void uartReadyRead();
-    void frequencyTextChanged(const QString& str);
-    void amplitudeTextChanged(const QString& str);
-    void waveformCheckChanged(bool checked);
-    void showUartConfig(bool checked = false);
-    void uartGetConfig(uartConfig uartConf);
+    void slot_uartReadyRead();
+    void slot_frequencyTextChanged(const QString& str);
+    void slot_amplitudeTextChanged(const QString& str);
+    void slot_waveformCheckChanged(bool checked);
+    void slot_showUartConfig(bool checked = false);
+    void slot_uartGetConfig(uartConfig uartConf);
 };
 #endif // MAINWINDOW_H
