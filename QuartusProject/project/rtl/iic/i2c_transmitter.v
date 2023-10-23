@@ -1,22 +1,10 @@
-module i2c_transmitterTest(
-	//input clk,
+module i2c_transmitter(
+	input clk,
 	output reg SCL,
 	inout SDA,
-	output reg byteSent
-	//input [7:0] writeWord
+	output reg byteSent,
+	input [7:0] writeWord
 );
-	// ------------ Simulation ------------
-	
-	reg clk;
-	initial clk <= 1'd1;
-	always #5 clk <= ~clk;
-	
-	reg [7:0] writeWord;
-	initial writeWord <= 8'b10101010;
-	always #1000 writeWord <= writeWord + 1'd1;
-	
-	// ------------ Simulation ------------
-	
 	initial SCL <= 1'd1;
 	
 	reg SDA_out;
@@ -69,7 +57,7 @@ module i2c_transmitterTest(
 							sendState <= SEND_ACK_WAIT;
 						end
 						SDA_out <= writeWord[sendBitCounter];
-						sendBitCounter = sendBitCounter - 1'b1;
+						sendBitCounter <= sendBitCounter - 1'b1;
 					end
 						else if(sendState == SEND_ACK_WAIT) begin
 								SDA_io <= 1'b0; // read

@@ -6,19 +6,23 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport # printsupport is n
 CONFIG += c++17
 
 SOURCES += \
+    dacplotter.cpp \
     dds.cpp \
     main.cpp \
     mainwindow.cpp \
     qcustomplot.cpp \
-    uartconfigdialog.cpp \
-    uarttransmitter.cpp
+    serialmanager.cpp \
+    uartconfigdialog.cpp
 
 HEADERS += \
+    dacplotter.h \
     dds.h \
+    debug.h \
     mainwindow.h \
     qcustomplot.h \
-    uartconfigdialog.h \
-    uarttransmitter.h
+    serialmanager.h \
+    tests.h \
+    uartconfigdialog.h
 
 FORMS += \
     mainwindow.ui \

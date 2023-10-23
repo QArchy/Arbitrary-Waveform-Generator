@@ -2,7 +2,9 @@ module top(
 	input clk,
 	input UART_RXD,
 	output UART_TXD,
-	output [7:0] signal_8bit
+	output [7:0] signal_8bit,
+	output SCL,
+	inout SDA
 );
 	// ------------------------------------------- PLL CONFIG
 	
@@ -58,9 +60,11 @@ module top(
 	//	// input amplitude[31:0]
 	//);
 	
-	//i2cDacTransmitter(
-	//	.clk(i2cPllFrequency),
-	//	// input signal[31:31-7]
-	//);
+	pcf8591DAC_transmitter pcf8591DAC_transmitter_inst(
+		.clk(i2cPllFrequency),
+		.SCL(SCL),
+		.SDA(SDA),
+		.signal(signal[31:31-7])
+	);
 	
 endmodule

@@ -29,8 +29,8 @@ module uartRx(
 	
 	// preset output values
 	initial signalNumber = 8'd0;
-	initial adder = 32'd1367925;
-	initial amplitude = 32'd1000000;
+	initial adder = 32'd214748;
+	initial amplitude = 32'd255;
 	
 	// read state
 	reg [7:0] readState;

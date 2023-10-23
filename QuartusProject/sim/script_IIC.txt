@@ -1,0 +1,37 @@
+if ![info exists QUARTUS_INSTALL_DIR] {
+  set QUARTUS_INSTALL_DIR "E:/quartus16/quartus"
+}
+
+if ![info exists PRJ_DIR] {
+  set PRJ_DIR "C:/Users/hudyakovas/Desktop/Khudyakov/Arbitrary-Waveform-Generator-master/QuartusProject"
+}
+
+global QUARTUS_INSTALL_DIR
+global PRJ_DIR
+
+cd "$PRJ_DIR/sim"
+vlib work
+vmap work work
+
+vlog 	../tb/i2c_transmitterTest.v
+
+vlog     "$QUARTUS_INSTALL_DIR/eda/sim_lib/altera_primitives.v"
+vlog     "$QUARTUS_INSTALL_DIR/eda/sim_lib/sgate.v"                              
+vlog     "$QUARTUS_INSTALL_DIR/eda/sim_lib/220model.v"                   
+vlog     "$QUARTUS_INSTALL_DIR/eda/sim_lib/altera_mf.v"                          
+vlog -sv "$QUARTUS_INSTALL_DIR/eda/sim_lib/altera_lnsim.sv"                      
+vlog     "$QUARTUS_INSTALL_DIR/eda/sim_lib/mentor/arriav_atoms_ncrypt.v"         
+vlog     "$QUARTUS_INSTALL_DIR/eda/sim_lib/mentor/arriav_hmi_atoms_ncrypt.v"     
+vlog     "$QUARTUS_INSTALL_DIR/eda/sim_lib/arriav_atoms.v"                       
+vlog     "$QUARTUS_INSTALL_DIR/eda/sim_lib/mentor/arriav_hssi_atoms_ncrypt.v"    
+vlog     "$QUARTUS_INSTALL_DIR/eda/sim_lib/arriav_hssi_atoms.v"                  
+vlog     "$QUARTUS_INSTALL_DIR/eda/sim_lib/mentor/arriav_pcie_hip_atoms_ncrypt.v"
+vlog     "$QUARTUS_INSTALL_DIR/eda/sim_lib/arriav_pcie_hip_atoms.v"
+
+vsim -voptargs=+acc work.i2c_transmitterTest
+
+#add wave -position insertpoint  \
+#sim:/signalGeneratorTest/clk \
+#sim:/signalGeneratorTest/signalData \
+
+run -all

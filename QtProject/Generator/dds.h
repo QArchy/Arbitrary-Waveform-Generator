@@ -1,6 +1,8 @@
 #ifndef DDS_H
 #define DDS_H
 
+#include "debug.h"
+
 #include <QByteArray>
 #include "qglobal.h"
 
@@ -11,15 +13,6 @@ enum WaveForm {
     Rect = 3,
     Saw = 4,
     Ramp = 5
-};
-
-enum ReadState {
-    SOM = 1,
-    SIGNAL_DATA_32_24 = 2,
-    SIGNAL_DATA_23_16 = 3,
-    SIGNAL_DATA_15_8 = 4,
-    SIGNAL_DATA_7_0 = 5,
-    EOM = 6,
 };
 
 class DDS {
@@ -35,7 +28,7 @@ public:
     quint32 getFpgaFrequency() const;
     void setFpgaFrequency(quint32 newFpgaFrequency);
     quint32 getOutputAmplitude() const;
-    void setOutputAmplitude(quint32 amplitudePercent);
+    void setOutputAmplitude(qreal amplitudePercent);
     qreal getAdder() const;
     void setAdder(qreal newFrequency);
     quint32 getAdderInt() const;
