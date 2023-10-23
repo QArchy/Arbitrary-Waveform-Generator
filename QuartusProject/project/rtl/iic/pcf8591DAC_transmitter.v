@@ -2,20 +2,23 @@ module pcf8591DAC_transmitter (
 	input clk,
 	output SCL,
 	inout SDA,
-	input [7:0] signal
+	input [7:0] signal,
+	input reset
 );
+	parameter BYTE_ADRESS = 8'b10010000 // 1001000 - adress, 0 - write mode
+	parameter BYTE_CONTROL = 8'b01000000 // enable DAC
 	
 	reg [7:0] sig;
-	initial sig <= {7'h47, 1'd0 /* write mode (DAC) */ }; // adress and io mode
+	initial sig <= 8'd0;
 	
-	wire byteSent;
-	
+	wire readyTransmit;
 	i2c_transmitter i2c_transmitter_inst(
 		.clk(clk),
 		.SCL(SCL),
 		.SDA(SDA),
-		.byteSent(byteSent),
-		.writeWord(signal)
+		.readyTransmit(readyTransmit),
+		.writeWord(sig),
+		.reset(reset)
 	);
 	
 	parameter SEND_ADRESS_BYTE = 2'b00;
@@ -25,28 +28,29 @@ module pcf8591DAC_transmitter (
 	reg [1:0] sendState;
 	initial sendState <= SEND_ADRESS_BYTE;
 	
-	always @(posedge clk) begin
-		if (sendState == SEND_ADRESS_BYTE) begin
-				if (byteSent) begin
-						sig <= 8'b00000000;
-						sendState <= SEND_CONTROOL_BYTE;
-					end
-						else;
+	always @(posedge clk or posedge reset) begin
+		if (reset) begin
+				sig <= 8'd0;
+				sendState <= SEND_ADRESS_BYTE;
 			end
-				else if (sendState == SEND_CONTROOL_BYTE) begin
-						if (byteSent) begin
-								sig <= signal;
-								sendState <= SEND_DATA;
-							end
-								else;
+				else if (sendState == SEND_ADRESS_BYTE) begin
+						if (readyTransmit) begin
+							sig <= BYTE_ADRESS;
+							sendState <= SEND_CONTROOL_BYTE;
+						end
+							else;
 					end
-						else if (sendState == SEND_DATA) begin
-								if (byteSent) begin
-										sig <= signal;
+						else if (sendState == SEND_CONTROOL_BYTE) begin
+								if (readyTransmit) begin
+										sig <= BYTE_CONTROL;
+										sendState <= SEND_DATA;
 									end
 										else;
 							end
-								else;
+								else if (sendState == SEND_DATA) begin
+										sig <= readyTransmit ? signal : 0;
+									end
+										else;
 	end
 	
 endmodule
