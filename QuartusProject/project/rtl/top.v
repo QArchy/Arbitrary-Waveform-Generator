@@ -4,12 +4,18 @@ module top(
 	output UART_TXD,
 	output [7:0] signal_8bit,
 	output SCL,
-	inout SDA
+	inout SDA,
+	input resetN
 );
-	// ------------------------------------------- PLL CONFIG
-	
 	wire reset;
-	assign reset = 1'd0;
+	
+	btnDebouncer btnDebouncer_inst(
+		.btnSig(~resetN),
+		.clk(clk),
+		.debouncedSig(reset)
+	);
+
+	// ------------------------------------------- PLL CONFIG
 	
 	wire i2cPllFrequency;
 	wire uartPllFrequency;
@@ -17,11 +23,11 @@ module top(
 	wire pllLocked;
 	
 	uart_i2c_max_PLL uart_i2c_max_PLL_inst(
-		.areset(reset),
+		.areset(),
 		.inclk0(clk),
-		.c0(i2cPllFrequency), // 10KHz
-		.c1(uartPllFrequency), // 10MHz
-		.c2(maxClk), // 200MHz
+		.c0(i2cPllFrequency), 	// 80KHz
+		.c1(uartPllFrequency), 	// 10MHz
+		.c2(maxClk), 				// 200MHz
 		.locked(pllLocked)
 	);
 	
@@ -39,32 +45,35 @@ module top(
 		.signalNumber(signalNumber),
 		.adder(adder),
 		.amplitude(amplitude),
-		.signal(signal)
+		.signal(signal),
+		.reset(reset)
 	);
 	
 	// ------------------------------------------- SIGNAL GENERATOR CONFIG
 	
-	assign signal_8bit = signal[31:31-7];
-	
 	signalGenerator signalGenerator_inst(
-		.clk(maxClk), 								// input
+		.clk(maxClk),								// input
+		.reset(reset),								// input
 		.signalNumber(signalNumber), 			// input
 		.adder(adder), 							// input
 		.signal(signal) 							// output
 	);
 	
-	// ------------------------------------------- I2C CONFIG
-	
-	//amplitude_curcuit_transmitter(
-	//	.clk(maxclk),
-	//	// input amplitude[31:0]
-	//);
+	amplitudeChanger amplitudeChanger_inst(
+		.clk(maxClk),
+		.amplitude(amplitude[7:0]),
+		.signal(signal[31:24]),
+		.amplSignal(signal_8bit)
+	);
+		
+	// ------------------------------------------- PCF8591 I2C CONFIG
 	
 	pcf8591DAC_transmitter pcf8591DAC_transmitter_inst(
 		.clk(i2cPllFrequency),
 		.SCL(SCL),
 		.SDA(SDA),
-		.signal(signal[31:31-7])
+		.signal(signal_8bit),
+		.reset(reset)
 	);
 	
 endmodule

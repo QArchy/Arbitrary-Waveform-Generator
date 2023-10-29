@@ -1,0 +1,46 @@
+
+
+D:/programming/ArbitraryWaveformGenerator/QuartusProject/project/rtl/ip/pll/uart_i2c_max_PLL.v
+
+Oct 26 03PM:51:27>: Error in CNX file format.
+
+Error messages are listed in file
+D:/programming/ArbitraryWaveformGenerator/QuartusProject/project/rtl/ip/pll/uart_i2c_max_PLL.cnxerr.
+
+Can't create the custom megafunction variation file(s)
+
+D:/programming/ArbitraryWaveformGenerator/QuartusProject/project/rtl/ip/pll/uart_i2c_max_PLL.v
+
+Oct 26 03PM:51:34>: Error in CNX file format.
+
+Error messages are listed in file
+D:/programming/ArbitraryWaveformGenerator/QuartusProject/project/rtl/ip/pll/uart_i2c_max_PLL.cnxerr.
+
+Can't create the custom megafunction variation file(s)
+
+D:/programming/ArbitraryWaveformGenerator/QuartusProject/project/rtl/ip/pll/uart_i2c_max_PLL.v
+
+Oct 26 03PM:53:07>: Error in CNX file format.
+
+Error messages are listed in file
+D:/programming/ArbitraryWaveformGenerator/QuartusProject/project/rtl/ip/pll/uart_i2c_max_PLL.cnxerr.
+
+Can't create the custom megafunction variation file(s)
+
+D:/programming/ArbitraryWaveformGenerator/QuartusProject/project/rtl/ip/pll/uart_i2c_max_PLL.v
+
+Oct 26 03PM:53:17>: Error in CNX file format.
+
+Error messages are listed in file
+D:/programming/ArbitraryWaveformGenerator/QuartusProject/project/rtl/ip/pll/uart_i2c_max_PLL.cnxerr.
+
+Can't create the custom megafunction variation file(s)
+
+D:/programming/ArbitraryWaveformGenerator/QuartusProject/project/rtl/ip/pll/uart_i2c_max_PLL.v
+
+Oct 26 06PM:23:04>: Error in CNX file format.
+
+Error messages are listed in file
+D:/programming/ArbitraryWaveformGenerator/QuartusProject/project/rtl/ip/pll/uart_i2c_max_PLL.cnxerr.
+
+Can't create the custom megafunction variation file(s)

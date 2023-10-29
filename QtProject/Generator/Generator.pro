@@ -4,24 +4,19 @@ QT += serialport
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport # printsupport is needed for QCustomPlot
 
 CONFIG += c++17
+CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
 SOURCES += \
-    dacplotter.cpp \
     dds.cpp \
     main.cpp \
     mainwindow.cpp \
-    qcustomplot.cpp \
     serialmanager.cpp \
     uartconfigdialog.cpp
 
 HEADERS += \
-    dacplotter.h \
     dds.h \
-    debug.h \
     mainwindow.h \
-    qcustomplot.h \
     serialmanager.h \
-    tests.h \
     uartconfigdialog.h
 
 FORMS += \

@@ -1,5 +1,6 @@
 module uartTx(
 	input clk,
+	input reset,
 	
 	// Write to uart
 	output reg [7:0] to_uart_data,	
@@ -36,41 +37,45 @@ module uartTx(
 	always @(posedge clk) begin
 		posedge_to_uart_ready <= ~prev_to_uart_ready & to_uart_ready;
 		
-		if (posedge_to_uart_ready) begin
-			to_uart_valid <= 1'd1; // if to_uart_ready data always valid
-			
-			if (writeState == UART_WRITE_SOM) begin
-				to_uart_data <= UART_SOM;
-				writeState <= UART_WRITE_SIGNAL_31_24;
-			end	
-				else if (writeState == UART_WRITE_SIGNAL_31_24) begin
-						to_uart_data <= signal[31:24];
-						writeState <= UART_WRITE_SIGNAL_23_16;
-					end
-						else if (writeState == UART_WRITE_SIGNAL_23_16) begin	
-							to_uart_data <= signal[23:16];
-							writeState <= UART_WRITE_SIGNAL_15_8;
-						end
-							else if (writeState == UART_WRITE_SIGNAL_15_8) begin
-								to_uart_data <= signal[15:8];
-								writeState <= UART_WRITE_SIGNAL_7_0;
-							end
-								else if (writeState == UART_WRITE_SIGNAL_7_0) begin
-									to_uart_data <= signal[7:0];
-									writeState <= UART_WRITE_EOM;
-								end
-									else if (writeState == UART_WRITE_EOM) begin
-											to_uart_data <= UART_EOM;
-											writeState <= UART_WRITE_SOM;
-										end
-										
+		if (reset) begin
+			to_uart_data <= 8'd0;
+			to_uart_error <= 1'd0;
+			to_uart_valid <= 1'd0;
+			writeState <= UART_WRITE_SOM;
+			posedge_to_uart_ready <= 1'd0;
+			prev_to_uart_ready <= 1'd0;
 		end
-			else;
+			else if (posedge_to_uart_ready) begin
+				to_uart_valid <= 1'd1; // if to_uart_ready data always valid
+				
+				if (writeState == UART_WRITE_SOM) begin
+					to_uart_data <= UART_SOM;
+					writeState <= UART_WRITE_SIGNAL_31_24;
+				end	
+					else if (writeState == UART_WRITE_SIGNAL_31_24) begin
+							to_uart_data <= signal[31:24];
+							writeState <= UART_WRITE_SIGNAL_23_16;
+						end
+							else if (writeState == UART_WRITE_SIGNAL_23_16) begin	
+								to_uart_data <= signal[23:16];
+								writeState <= UART_WRITE_SIGNAL_15_8;
+							end
+								else if (writeState == UART_WRITE_SIGNAL_15_8) begin
+									to_uart_data <= signal[15:8];
+									writeState <= UART_WRITE_SIGNAL_7_0;
+								end
+									else if (writeState == UART_WRITE_SIGNAL_7_0) begin
+										to_uart_data <= signal[7:0];
+										writeState <= UART_WRITE_EOM;
+									end
+										else if (writeState == UART_WRITE_EOM) begin
+												to_uart_data <= UART_EOM;
+												writeState <= UART_WRITE_SOM;
+											end
+											
+			end
+				else;
 			
-		//if (~prev_to_uart_ready) begin	
-		//    to_uart_valid <= 1'd0;   ??????????????????????????
-		//end
-		
 		prev_to_uart_ready <= to_uart_ready;
 		
 	end

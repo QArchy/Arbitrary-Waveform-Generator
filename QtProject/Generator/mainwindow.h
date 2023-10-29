@@ -1,14 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "debug.h"
-
 #include <QMainWindow>
+#include <QThread>
 #include <QVector>
 #include <QtMath>
 #include "uartconfigdialog.h"
 #include "serialmanager.h"
-#include "dacplotter.h"
 #include "dds.h"
 
 QT_BEGIN_NAMESPACE
@@ -30,7 +28,6 @@ private:
     // class instances
     SerialManager* serialManager;
     DDS* dds;
-    DACPlotter* dacPlotter;
 
 private slots:
     // slots to acquire dds configuration
@@ -40,6 +37,8 @@ private slots:
     // slots dedicated to uart configuration
     void slot_showUartConfig(bool checked = false);
     void slot_uartGetConfig(uartConfig uartConf);
+
+    void on_MaxVoutLineEdit_textChanged(const QString &arg1);
 
 signals:
     void sendCommand();

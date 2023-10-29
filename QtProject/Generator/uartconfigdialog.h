@@ -1,8 +1,6 @@
 #ifndef UARTCONFIGDIALOG_H
 #define UARTCONFIGDIALOG_H
 
-#include "debug.h"
-
 #include "serialmanager.h"
 #include <QDialog>
 #include <QSerialPort>

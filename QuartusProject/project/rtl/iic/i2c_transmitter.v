@@ -81,6 +81,7 @@ module i2c_transmitter(
 												end
 						end
 							else if (sendState == SEND_BYTE) begin // TRANSMISSION
+									readyTransmit <= 1'b0;
 									if (freqDivider == 3'b000) begin
 											SDA_out <= writeWord[sendBitCounter];
 											if (sendBitCounter == 3'b000) begin
@@ -127,7 +128,6 @@ module i2c_transmitter(
 																			end
 												end
 													else;
-					readyTransmit <= 1'b0;
 					freqDivider <= freqDivider + 1'b1;
 				end
 	end

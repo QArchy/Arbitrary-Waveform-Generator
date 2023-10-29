@@ -1,6 +1,6 @@
 module uartRxTx(
 	input clk,
-	//input reset,
+	input reset,
 	input UART_RXD,
 	output UART_TXD,
 	
@@ -26,6 +26,7 @@ module uartRxTx(
 	
 	uartRx uartRx_inst(
 		.clk(clk),
+		.reset(reset),
 		
 		.from_uart_ready(from_uart_ready), 					
 		.from_uart_data(from_uart_data),		
@@ -39,6 +40,7 @@ module uartRxTx(
 	
 	uartTx uartTx_inst(
 		.clk(clk),
+		.reset(reset),
 	
 		.to_uart_data(to_uart_data),	
 		.to_uart_error(to_uart_error),		

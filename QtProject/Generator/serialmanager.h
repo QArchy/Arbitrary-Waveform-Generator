@@ -1,8 +1,6 @@
 #ifndef SERIALMANAGER_H
 #define SERIALMANAGER_H
 
-#include "debug.h"
-
 #include <QVector>
 #include <QByteArray>
 #include <QSerialPort>
@@ -33,15 +31,14 @@ class SerialManager: public QObject {
 
 private:
     QSerialPort* port;
+    qreal plotData;
+    quint8 asciiData;
 
 public:
     SerialManager();
     ~SerialManager();
     bool configurePort(uartConfig uartConf);
     quint64 write(QByteArray data);
-
-signals:
-    void readyRead(QVector<quint32> data);
 };
 
 #endif // SERIALMANAGER_H

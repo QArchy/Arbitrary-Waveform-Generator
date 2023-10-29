@@ -5,11 +5,11 @@ module pcf8591DAC_transmitter (
 	input [7:0] signal,
 	input reset
 );
-	parameter BYTE_ADRESS = 8'b10010000 // 1001000 - adress, 0 - write mode
-	parameter BYTE_CONTROL = 8'b01000000 // enable DAC
+	parameter BYTE_ADRESS = 8'b10010000; // 1001000 - adress, 0 - write mode
+	parameter BYTE_CONTROL = 8'b01000000; // enable DAC
 	
 	reg [7:0] sig;
-	initial sig <= 8'd0;
+	initial sig <= BYTE_ADRESS;
 	
 	wire readyTransmit;
 	i2c_transmitter i2c_transmitter_inst(
@@ -30,25 +30,25 @@ module pcf8591DAC_transmitter (
 	
 	always @(posedge clk or posedge reset) begin
 		if (reset) begin
-				sig <= 8'd0;
+				sig <= BYTE_ADRESS;
 				sendState <= SEND_ADRESS_BYTE;
 			end
 				else if (sendState == SEND_ADRESS_BYTE) begin
 						if (readyTransmit) begin
-							sig <= BYTE_ADRESS;
+							sig <= BYTE_CONTROL;
 							sendState <= SEND_CONTROOL_BYTE;
 						end
 							else;
 					end
 						else if (sendState == SEND_CONTROOL_BYTE) begin
 								if (readyTransmit) begin
-										sig <= BYTE_CONTROL;
+										sig <= signal;
 										sendState <= SEND_DATA;
 									end
 										else;
 							end
 								else if (sendState == SEND_DATA) begin
-										sig <= readyTransmit ? signal : 0;
+										sig <= readyTransmit ? signal : sig;
 									end
 										else;
 	end

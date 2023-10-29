@@ -1,0 +1,24 @@
+if ![info exists QUARTUS_INSTALL_DIR] {
+  set QUARTUS_INSTALL_DIR "E:/quartus16/quartus"
+}
+
+if ![info exists PRJ_DIR] {
+  set PRJ_DIR "C:/Users/hudyakovas/Desktop/Khudyakov/MyProjects/Arbitrary-Waveform-Generator/QuartusProject"
+}
+
+global QUARTUS_INSTALL_DIR
+global PRJ_DIR
+
+cd "$PRJ_DIR/sim"
+vlib work
+vmap work work
+
+vlog ../tb/btnDebouncer.v
+
+vsim -voptargs=+acc work.btnDebouncer
+
+#add wave -position insertpoint  \
+#sim:/signalGeneratorTest/clk \
+#sim:/signalGeneratorTest/signalData \
+
+run -all

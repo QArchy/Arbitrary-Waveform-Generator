@@ -47,7 +47,7 @@ create_clock -name {fpgaClk} -period 20.000 -waveform { 0.000 10.000 } [get_port
 # Create Generated Clock
 #**************************************************************
 
-
+derive_pll_clocks
 
 #**************************************************************
 # Set Clock Latency

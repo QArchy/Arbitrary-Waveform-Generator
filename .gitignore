@@ -29,7 +29,7 @@ QuartusProject/sim/work/_info
 *.sopcinfo
 *.qws
 db/*
-*/greybox_tmp
+*/greybox_tmp/
 */incremental_db
 */output_files
 *.kpt
@@ -71,3 +71,5 @@ QuartusProject/project/incremental_db/README
 *.tdb
 *.dfp
 *.rcfdb
+greybox_tmp
+/QtProject/Generator/Generator.pro.user.030e9eb.22

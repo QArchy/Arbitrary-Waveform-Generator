@@ -1,8 +1,6 @@
 #ifndef DDS_H
 #define DDS_H
 
-#include "debug.h"
-
 #include <QByteArray>
 #include "qglobal.h"
 
@@ -19,6 +17,8 @@ class DDS {
 private:
     quint32 fpgaFrequency;
     quint32 outputAmplitude;
+    qreal maxOutputAmplitude;
+    qreal currentOutputAmplitude;
     qreal adder;
     quint32 adderInt;
     quint8 wave;
@@ -36,6 +36,8 @@ public:
     void setWave(quint8 newWave);
     // dds functions
     QByteArray formUartCommand();
+    qreal getCurrentOutputAmplitude() const;
+    void setMaxOutputAmplitude(qreal newMaxOutputAmplitude);
 };
 
 #endif // DDS_H

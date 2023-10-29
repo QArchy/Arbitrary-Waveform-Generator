@@ -1,12 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
     uartConfigDialog = new UartConfigDialog();
-    serialManager = new SerialManager();
     dds = new DDS();
+    serialManager = new SerialManager();
 
     // window uartConfig
     QObject::connect(ui->actionComPortConfig, SIGNAL(triggered(bool)), this, SLOT(slot_showUartConfig(bool)));
@@ -37,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 MainWindow::~MainWindow() {
     delete serialManager;
     delete dds;
+    delete uartConfigDialog;
     delete ui;
 }
 
@@ -54,10 +56,9 @@ void MainWindow::slot_frequencyTextChanged(const QString& str) {
 
 void MainWindow::slot_amplitudeTextChanged(const QString& str) {
     dds->setOutputAmplitude(str.toDouble());
+    ui->CurrentVoutLineEdit->setText(QString::number(dds->getCurrentOutputAmplitude()));
     serialManager->write(dds->formUartCommand());
-#ifdef DEBUG_MODE
     qDebug() << "Output amplitude: " << dds->getOutputAmplitude();
-#endif
 }
 
 void MainWindow::slot_waveformCheckChanged(bool checked) {
@@ -76,9 +77,7 @@ void MainWindow::slot_waveformCheckChanged(bool checked) {
         dds->setWave(WaveForm::Ramp);
     }
     serialManager->write(dds->formUartCommand());
-#ifdef DEBUG_MODE
     qDebug() << "Dds wave: " << dds->getWave();
-#endif
 }
 
 void MainWindow::slot_showUartConfig(bool checked) {
@@ -90,7 +89,14 @@ void MainWindow::slot_showUartConfig(bool checked) {
 void MainWindow::slot_uartGetConfig(uartConfig uartConf) {
     bool portOpened = serialManager->configurePort(uartConf);
     Q_UNUSED(portOpened);
-#ifdef DEBUG_MODE
     qDebug() << "Port opened: " << portOpened;
-#endif
 }
+
+void MainWindow::on_MaxVoutLineEdit_textChanged(const QString &arg1) {
+    dds->setMaxOutputAmplitude(arg1.toDouble());
+    dds->setOutputAmplitude(ui->VPercentSpinBox->text().toDouble());
+    ui->CurrentVoutLineEdit->setText(QString::number(dds->getCurrentOutputAmplitude()));
+    serialManager->write(dds->formUartCommand());
+    qDebug() << "Output amplitude: " << dds->getOutputAmplitude();
+}
+
