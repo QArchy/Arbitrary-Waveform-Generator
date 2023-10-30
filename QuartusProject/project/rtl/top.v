@@ -22,10 +22,10 @@ module top(
 	wire maxClk;
 	wire pllLocked;
 	
-	uart_i2c_max_PLL uart_i2c_max_PLL_inst(
+	pll pll_inst(
 		.areset(),
 		.inclk0(clk),
-		.c0(i2cPllFrequency), 	// 80KHz
+		.c0(i2cPllFrequency), 	// 900KHz
 		.c1(uartPllFrequency), 	// 10MHz
 		.c2(maxClk), 				// 200MHz
 		.locked(pllLocked)

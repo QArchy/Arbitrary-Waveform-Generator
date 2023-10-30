@@ -44,3 +44,7 @@ Error messages are listed in file
 D:/programming/ArbitraryWaveformGenerator/QuartusProject/project/rtl/ip/pll/uart_i2c_max_PLL.cnxerr.
 
 Can't create the custom megafunction variation file(s)
+
+D:/programming/ArbitraryWaveformGenerator/QuartusProject/project/rtl/ip/pll/uart_i2c_max_PLL.v
+
+Oct 30 07PM:59:43>: File D:/programming/ArbitraryWaveformGenerator/QuartusProject/project/rtl/ip/pll/uart_i2c_max_PLL.cnx could not be opened
